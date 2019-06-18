@@ -24,11 +24,13 @@ const DEFAULT_SYM = 'tBTCUSD';
 const DEFAULT_INTERVAL = '1h';
 
 let CANDLE_SPAN_MS = {};
-CANDLE_SPAN_MS['1D'] = 24 * 60 * 60 * 1000;  // minutes * seconds * miliseconds
-CANDLE_SPAN_MS['12h'] = 12 *60 * 60 * 1000;  // minutes * seconds * miliseconds
-CANDLE_SPAN_MS['6h'] = 6 *60 * 60 * 1000;  // minutes * seconds * miliseconds
+CANDLE_SPAN_MS['1D'] = 24 * 60 * 60 * 1000;  // hours * minutes * seconds * miliseconds
+CANDLE_SPAN_MS['12h'] = 12 *60 * 60 * 1000;
+CANDLE_SPAN_MS['6h'] = 6 *60 * 60 * 1000;
 
-CANDLE_SPAN_MS['1h'] = 60 * 60 * 1000;  // minutes * seconds * miliseconds
+// CANDLE_SPAN_MS['4h'] = 6 *60 * 60 * 1000;   // BITFINEX DOES NOT SUPPORT 4 HOUR CANDLES !!!!!
+
+CANDLE_SPAN_MS['1h'] = 60 * 60 * 1000;  
 CANDLE_SPAN_MS['15m'] = 15 * 60 * 1000;
 CANDLE_SPAN_MS['30m'] = 30 * 60 * 1000;
 CANDLE_SPAN_MS['5m'] = 5 * 60 * 1000;
@@ -88,6 +90,12 @@ exports.range = async function(start_time_ms, end_time_ms, symbol, interval, dat
   // console.log((new Date(end_time)).toISOString());
 
   let timespan_ms = CANDLE_SPAN_MS[interval];
+
+  if ( !timespan_ms )
+  {
+    console.log(`*** ERROR: unsupported timespan ${interval}`);
+    process.exit();
+  }
 
   // We're getting [interval] candles, find out how many there are between the two dates
   let numcandles = Math.round(Math.abs(start_time.getTime() - end_time.getTime()) / timespan_ms);
