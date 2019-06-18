@@ -5,7 +5,7 @@
 //
 // Helper module to grab data from Binance.
 //
-// Finex returns an array of arrays:
+// Binance returns an array of arrays:
 /*
 [
   [
